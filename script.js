@@ -127,8 +127,13 @@ async function displayLeaderboard() {
             const data = doc.data();
             const uname = data.username || 'Unknown';
             const isMe = uname === uniqueUsername(user);
-            // Keep all rows in proper rank order, just highlight your row
-            html += `<tr${isMe ? ' class="me"' : ''}><td>${rank}</td><td>${uname}</td><td>${data.score}</td></tr>`;
+
+            // build classes for the row: rank + 'me' if it's the current user
+            const classes = [];
+            if (isMe) classes.push('me');
+            if (rank <= 3) classes.push(`rank-${rank}`);
+
+            html += `<tr class="${classes.join(' ')}"><td>${rank}</td><td>${uname}</td><td>${data.score}</td></tr>`;
             rank++;
         });
 
@@ -140,6 +145,7 @@ async function displayLeaderboard() {
         leaderboardDiv.innerHTML = `<p style="color:var(--accent2)">Error loading leaderboard. Check connection.</p>`;
     }
 }
+
 
 
 // ----- SNAKE GAME LOGIC below -----
